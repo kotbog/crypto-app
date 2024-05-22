@@ -4,9 +4,10 @@ import {Colors} from "../styles/colors";
 import BackButton from "../components/BackButton";
 import {useState} from "react";
 import SvgUri from "react-native-svg-uri";
+import {useTranslation} from "react-i18next";
 
 export default function EnterPinScreen({navigation}) {
-
+    const {t} = useTranslation()
     const [pinCode, setPinCode] = useState('');
     function handleBtnPress(num) {
         if(pinCode.length < 5) {
@@ -27,8 +28,8 @@ export default function EnterPinScreen({navigation}) {
             <View style={styles.iconDevice}>
                 <SvgUri source={require('../assets/icons/device.svg')} width={24} height={24}/>
             </View>
-            <Text style={{fontSize: 15, color: Colors.textBlack, marginTop: 15}}>Create a pin code</Text>
-            <Text style={styles.lightText}>enter a 5 digit code</Text>
+            <Text style={{fontSize: 15, color: Colors.textBlack, marginTop: 15}}>{t('CREATE_PIN')}</Text>
+            <Text style={styles.lightText}>{t('ENTER_PIN')}</Text>
             <View style={{flexDirection: 'row', gap: 10, marginTop: 15}}>
                 {
                     Array.from({ length: 5 }).map((item, index) =>
@@ -37,7 +38,7 @@ export default function EnterPinScreen({navigation}) {
                             backgroundColor:  index < pinCode.length
                                 ? Colors.primaryOrange
                                 : '#C1C4CB'
-                        }}></View>
+                        }} key={index}></View>
                     )
                 }
             </View>
@@ -45,7 +46,10 @@ export default function EnterPinScreen({navigation}) {
         <View style={styles.numpad}>
             {
                 Array.from({ length: 9 }).map((item, index) =>
-                    <TouchableOpacity style={styles.numBtn} onPress={()=>handleBtnPress(index + 1)}>
+                    <TouchableOpacity
+                        style={styles.numBtn}
+                        key={index}
+                        onPress={()=>handleBtnPress(index + 1)}>
                         <Text style={{fontSize: 28, color: Colors.textBlack, fontWeight: 700}}>{index + 1}</Text>
                     </TouchableOpacity>
                 )
@@ -59,7 +63,7 @@ export default function EnterPinScreen({navigation}) {
                 </TouchableOpacity>
         </View>
         <View style={styles.btnGroup}>
-            <Button value={'Continue'}/>
+            <Button value={t('CONTINUE')} onPress={() => navigation.navigate('HomeStack')}/>
         </View>
     </SafeAreaView>
 }

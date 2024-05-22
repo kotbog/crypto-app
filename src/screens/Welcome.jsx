@@ -20,23 +20,25 @@ import BitcoinSvg from '../assets/Vector.svg'
 import {WelcomeOption} from "../components/WelcomeOption";
 import SvgUri from "react-native-svg-uri";
 import Link from "../components/Link";
+import {useTranslation} from "react-i18next";
 
 
 
 
 export default function WelcomeScreen({navigation}) {
+    const {t} = useTranslation()
 
     const options = [
         {
-            text: 'Crowd lending',
+            text: t('CROWD_LENDING'),
             icons: [Pending2, Pending1, Pending2]
         },
         {
-            text: 'Crowd real estate',
+            text: t('CROWD_ESTATE'),
             icons: [Estate1, Estate2, Estate3]
         },
         {
-            text: 'Commodities',
+            text: t('COMMODITIES'),
             icons: [Commodity1, Commodity2, Commodity3]
         },
         {
@@ -44,7 +46,7 @@ export default function WelcomeScreen({navigation}) {
             icons: [Etf1, Etf2, Etf3]
         },
         {
-            text: 'Crypto',
+            text: t('CRYPTO'),
             icons: [Crypto1, Crypto2, Crypto3]
         }
     ]
@@ -69,8 +71,8 @@ export default function WelcomeScreen({navigation}) {
                     </View>
                 </View>
                 <View style={styles.buttonGroup}>
-                    <Link text={'Log In'} linkTo={'Login'} navigation={navigation}/>
-                    <Button value={'Sign up'} onPress={() => navigation.navigate('Signup')}/>
+                    <Link text={t('SIGN_IN')} linkTo={'Login'} navigation={navigation}/>
+                    <Button value={t('SIGN_UP')} onPress={() => navigation.navigate('Signup')}/>
                 </View>
             </View>
             <ImageBackground source={backgroundImage}

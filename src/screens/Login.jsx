@@ -17,10 +17,42 @@ import {useState} from "react";
 import ShowPasswordSvg from '../assets/icons/Eye.svg'
 import Pattern from '../assets/pattern2.png'
 import BackButton from "../components/BackButton";
+import * as yup from "yup";
+import {Controller, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {useDispatch, useSelector} from "react-redux";
+import {loginUser} from "../store/slices/AuthSlice";
+import {err} from "react-native-svg";
+import {useTranslation} from "react-i18next";
+
+
+const schema = yup.object().shape({ // validation schema
+    username: yup.string().required('Username is required field\''),
+    password: yup.string()
+        .required('Password is required'),
+});
+
 
 export default function LoginScreen({navigation}) {
-    const [showPassword, setShowPassword] = useState(false)
-    return <KeyboardAvoidingView
+    const dispatch = useDispatch();
+    const {t} = useTranslation()
+    const {control, handleSubmit, getValues,formState: {errors}}
+        = useForm({
+        resolver: yupResolver(schema)
+    })
+
+    const [showPassword, setShowPassword] = useState(false);
+    const {error, loading, user} = useSelector((state) => state.auth);
+
+    function onLoginSubmit() {
+        const username = getValues('username');
+        const password = getValues('password');
+        dispatch(loginUser({username, password}));
+    }
+
+    if(!error && user) navigation.navigate('HomeStack')
+
+    return <View
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{flex: 1, backgroundColor: Colors.background}}
     >
@@ -32,21 +64,57 @@ export default function LoginScreen({navigation}) {
             <View style={styles.avatar}>
                 <SvgUri width={24} height={24} source={ProfileSvg} />
             </View>
+
             <View>
-                <Text style={{fontSize: 15, color: Colors.textBlack}}>Login</Text>
-                <Text style={{fontSize: 15, color: Colors.textGray}}>Personal Account </Text>
+                <Text style={{fontSize: 15, color: Colors.textBlack}}>{t('LOGIN')}</Text>
+                <Text style={{fontSize: 15, color: Colors.textGray}}>{t('PERSONAL_ACCOUNT')}</Text>
             </View>
             </View>
                 <View style={styles.main}>
                     <View>
-                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>Email</Text>
-                        <Input placeholder={'Enter email'}/>
+                        {
+                            (error && !loading) && <Text style={{color: Colors.error, paddingBottom:10, fontSize:15}}>Invalid username or password</Text>
+                        }
+                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>{t('USERNAME')}</Text>
+                        {errors.email &&
+                            <Text style={styles.errorText}>{errors.username.message}</Text>
+                        }
+                        <Controller
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    placeholder={t('ENTER_USERNAME')}
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    style={errors.username && styles.errorInput}
+                                />
+                            )}
+                            name={'username'}
+                            control={control}
+                        />
                     </View>
 
                     <View>
-                        <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>Password</Text>
+                        <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>{t('PASSWORD')}</Text>
+                        {errors.password &&
+                            <Text style={styles.errorText}>{errors.password.message}</Text>
+                        }
                         <View style={{position: 'relative'}}>
-                            <Input placeholder={'Enter password'} secureTextEntry={!showPassword}/>
+                            <Controller
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        placeholder={t('ENTER_PASSWORD')}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        style={errors.password && styles.errorInput}
+                                        secureTextEntry={!showPassword}
+                                    />
+                                )}
+                                name={'password'}
+                                control={control}
+
+                            />
                             <TouchableOpacity style={styles.showIcon} onPress={() => setShowPassword(!showPassword)}>
                                 <SvgUri width={20} height={20} source={ShowPasswordSvg} />
                             </TouchableOpacity>
@@ -54,15 +122,15 @@ export default function LoginScreen({navigation}) {
 
                     </View>
                     <View style={{gap: 15}}>
-                        <Button value={'Continue'}/>
-                        <Link text={'Create Account'} linkTo={'Signup'}/>
+                        <Button value={t('CONTINUE')} onPress={handleSubmit(onLoginSubmit)}/>
+                        <Link text={t('CREATE_ACCOUNT')} linkTo={'Signup'}/>
                     </View>
                 </View>
         </View>
 
         </ImageBackground>
 
-    </KeyboardAvoidingView>
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -92,12 +160,21 @@ const styles = StyleSheet.create({
     showIcon: {
         position: 'absolute',
         right: 15,
-        top: '30%',
+        top: '50%',
+        transform: [{ translateY: -10 }],
     },
     main: {
         flex: 5,
         padding: 10,
         gap: 30,
-
+    },
+    errorText: {
+        fontSize: 15,
+        color: Colors.error,
+        marginLeft: 10,
+        paddingBottom: 5
+    },
+    errorInput: {
+        borderColor: Colors.error
     }
 })

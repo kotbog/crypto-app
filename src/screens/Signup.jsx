@@ -19,9 +19,10 @@ import BackButton from "../components/BackButton";
 import * as yup from "yup";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {useTranslation} from "react-i18next";
 
 
-const schema = yup.object().shape({
+const schema = yup.object().shape({ // validation schema
     email: yup.string().email('Email must be a valid').required('Email is required field\''),
     password: yup.string()
         .min(8, 'At least 8 characters')
@@ -37,7 +38,7 @@ const schema = yup.object().shape({
 
 export default function SignupScreen({navigation}) {
     const [showPassword, setShowPassword] = useState(false);
-
+    const {t} = useTranslation()
     const {control, handleSubmit,formState: {errors}}
         = useForm({
         resolver: yupResolver(schema)
@@ -61,14 +62,14 @@ export default function SignupScreen({navigation}) {
                 <ScrollView>
                 <View style={styles.form}>
                     <View>
-                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>Name</Text>
+                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>{t('USERNAME')}</Text>
                         {errors.name &&
                             <Text style={styles.errorText}>{errors.name.message}</Text>
                         }
                         <Controller
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Input
-                                    placeholder={'Enter name'}
+                                    placeholder={t('ENTER_USERNAME')}
                                     onBlur={onBlur}
                                     onChangeText={onChange}
                                     value={value}
@@ -81,14 +82,14 @@ export default function SignupScreen({navigation}) {
 
                     </View>
                     <View>
-                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>Email</Text>
+                        <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>{t('EMAIL')}</Text>
                         {errors.email &&
                             <Text style={styles.errorText}>{errors.email.message}</Text>
                         }
                         <Controller
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Input
-                                    placeholder={'Enter email'}
+                                    placeholder={t('ENTER_EMAIL')}
                                     onBlur={onBlur}
                                     onChangeText={onChange}
                                     value={value}
@@ -101,7 +102,7 @@ export default function SignupScreen({navigation}) {
                     </View>
 
                     <View>
-                        <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>Password</Text>
+                        <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>{t('PASSWORD')}</Text>
 
                             {errors.email &&
                                 <Text style={styles.errorText}>{errors.password.message}</Text>
@@ -110,7 +111,7 @@ export default function SignupScreen({navigation}) {
                             <Controller
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <Input
-                                        placeholder={'Enter password'}
+                                        placeholder={t('ENTER_PASSWORD')}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
@@ -131,7 +132,7 @@ export default function SignupScreen({navigation}) {
                 <View
                     behavior={'height'}
                     style={{padding: 10}}>
-                    <Button value={'Continue'} onPress={onSubmit}/>
+                    <Button value={t('CONTINUE')} onPress={onSubmit}/>
                 </View>
             </View>
         </ImageBackground>

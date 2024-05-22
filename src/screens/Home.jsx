@@ -9,19 +9,25 @@ import Post from "../components/Post";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {fetchPosts} from "../store/slices/PostsSlice";
+import {useQuery} from "@tanstack/react-query";
+import {getPosts} from "../services/PostsService";
+import {useTranslation} from "react-i18next";
 
 export default function HomeScreen({navigation}) {
-    const dispatch = useDispatch();
-    const posts = useSelector((state) => state.posts.posts);
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['posts'],
+        queryFn: () => getPosts(3)
+    });
 
-    useEffect(() => {
-        dispatch(fetchPosts())
-    }, [dispatch]);
-    console.log(posts)
+    const {t} = useTranslation()
+
+    const user = useSelector((state) => state.auth.user)
+    const posts = data;
+    if(isLoading) return <Text>Loading</Text>
     return <ScrollView style={{flex:1}}>
         <View style={styles.header}>
-            <Text style={{fontSize: 13, color: Colors.white}}>Your name</Text>
-            <Text style={{fontSize: 28, color: Colors.white, fontWeight: 'bold'}}>John Doe</Text>
+            <Text style={{fontSize: 13, color: Colors.white}}>{t("YOUR_NAME")}</Text>
+            <Text style={{fontSize: 28, color: Colors.white, fontWeight: 'bold'}}>{`${user.firstName} ${user.lastName}`}</Text>
         </View>
         <View style={{paddingHorizontal: 10, paddingTop: 20}}>
             <View style={styles.banner}>
@@ -38,7 +44,7 @@ export default function HomeScreen({navigation}) {
                     </View>
                 </View>
             </View>
-            <Text style={styles.headerText}>Before you start</Text>
+            <Text style={styles.headerText}>{t("BEFORE_START")}</Text>
             <ScrollView style={styles.additions} horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.additionItem}>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
@@ -46,7 +52,7 @@ export default function HomeScreen({navigation}) {
                         <Text style={{color: Colors.white, fontSize: 15, maxWidth: '70%'}}>Link your Bank Account</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{color: Colors.white, fontSize: 15}}>2 Steps</Text>
+                        <Text style={{color: Colors.white, fontSize: 15}}>{`2 ${t("STEPS")}`}</Text>
                         <SvgUri source={ArrowSvg} width={30} height={30}/>
                     </View>
                 </View>
@@ -57,17 +63,16 @@ export default function HomeScreen({navigation}) {
                         <Text style={{color: Colors.white, fontSize: 15, maxWidth: '70%'}}>Link your Bank Account</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <Text style={{color: Colors.white, fontSize: 15}}>2 Steps</Text>
+                        <Text style={{color: Colors.white, fontSize: 15}}>{`2 ${t("STEPS")}`}</Text>
                         <SvgUri source={ArrowSvg} width={30} height={30}/>
                     </View>
                 </View>
             </ScrollView>
             <View>
-                <Text style={styles.headerText}>Posts</Text>
+                <Text style={styles.headerText}>{t("POSTS")}</Text>
                 <View style={{gap: 10, marginTop: 10, paddingHorizontal: 5, marginBottom: 10}}>
-
                     {
-                        posts.map(post =>
+                        posts?.map(post =>
                             <Post
                                 navigation={navigation}
                                 heading={post.title}
@@ -77,19 +82,6 @@ export default function HomeScreen({navigation}) {
                             />
                         )
                     }
-
-                    {/*<Post*/}
-                    {/*    navigation={navigation}*/}
-                    {/*    heading={'How to take shower?'}*/}
-                    {/*    content={"The weather outside is lovely today, isn't it? I can't wait to take a stroll through the park."}/>*/}
-                    {/*<Post*/}
-                    {/*    navigation={navigation}*/}
-                    {/*    heading={'How to take shower?'}*/}
-                    {/*    content={"The weather outside is lovely today, isn't it? I can't wait to take a stroll through the park."}/>*/}
-                    {/*<Post*/}
-                    {/*    navigation={navigation}*/}
-                    {/*    heading={'How to take shower?'}*/}
-                    {/*    content={"The weather outside is lovely today, isn't it? I can't wait to take a stroll through the park."}/>*/}
                 </View>
             </View>
         </View>

@@ -11,13 +11,14 @@ import SignupScreen from "../screens/Signup";
 import TabNavigator from "./TabNavigator";
 import PostProfileScreen from "../screens/PostProfile";
 import EnterPinScreen from "../screens/EnterPin";
+import ChangeLangScreen from "../screens/ChangeLang";
+import {useSelector} from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 
 
 export default function StackNavigator() {
-
     const tabs = [
         {
             name: 'Welcome',
@@ -42,6 +43,10 @@ export default function StackNavigator() {
         {
             name: 'EnterPin',
             component: EnterPinScreen
+        },
+        {
+            name: 'ChangeLangScreen',
+            component: ChangeLangScreen
         }
     ]
 
@@ -51,8 +56,7 @@ export default function StackNavigator() {
             screenOptions={{headerShown: false}}
         >
             {
-                tabs.map(tab =>
-                    <Stack.Screen
+                tabs.map(tab =><Stack.Screen
                         name={tab.name}
                         component={tab.component}
                         key={tab.name}
