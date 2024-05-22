@@ -44,7 +44,7 @@ export default function SignupScreen({navigation}) {
     })
 
     function onSubmit() {
-        navigation.navigate('HomeStack')
+        navigation.navigate('EnterPin')
     }
 
     return <KeyboardAvoidingView style={{flex: 1}} behavior={'padding'}>
@@ -58,6 +58,7 @@ export default function SignupScreen({navigation}) {
                         <Text style={{fontSize: 15, color: Colors.textGray}}>Personal Account </Text>
                     </View>
                 </View>
+                <ScrollView>
                 <View style={styles.form}>
                     <View>
                         <Text style={{marginLeft:10, paddingBottom: 5, color: Colors.textGray, fontSize: 15}}>Name</Text>
@@ -101,10 +102,11 @@ export default function SignupScreen({navigation}) {
 
                     <View>
                         <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>Password</Text>
-                        <View style={{position: 'relative'}}>
+
                             {errors.email &&
                                 <Text style={styles.errorText}>{errors.password.message}</Text>
                             }
+                        <View style={{position: 'relative'}}>
                             <Controller
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <Input
@@ -125,6 +127,7 @@ export default function SignupScreen({navigation}) {
                         </View>
                     </View>
                 </View>
+                </ScrollView>
                 <View
                     behavior={'height'}
                     style={{padding: 10}}>
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 15,
         top: '50%',
-        transform: [{ translateY: -1 }],
+        transform: [{ translateY: -10 }],
     },
     errorText: {
         fontSize: 15,

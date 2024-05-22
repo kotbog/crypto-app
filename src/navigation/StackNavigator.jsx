@@ -10,6 +10,7 @@ import LoginScreen from "../screens/Login";
 import SignupScreen from "../screens/Signup";
 import TabNavigator from "./TabNavigator";
 import PostProfileScreen from "../screens/PostProfile";
+import EnterPinScreen from "../screens/EnterPin";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,10 @@ export default function StackNavigator() {
         {
             name: 'Post',
             component: PostProfileScreen
+        },
+        {
+            name: 'EnterPin',
+            component: EnterPinScreen
         }
     ]
 
