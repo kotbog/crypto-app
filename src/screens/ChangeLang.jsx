@@ -2,8 +2,8 @@ import {SafeAreaView, View, StyleSheet, Text, ScrollView, FlatList, TouchableOpa
 import BackButton from "../components/BackButton";
 import {Colors} from "../styles/colors";
 import {useDispatch, useSelector} from "react-redux";
-import SvgUri from "react-native-svg-uri";
 import {setLanguage} from "../store/slices/ProfileSlice";
+import GlobeSvg from '../assets/icons/Globe.svg'
 import {useTranslation} from "react-i18next";
 
 export default function ChangeLangScreen({navigation}) {
@@ -32,7 +32,7 @@ export default function ChangeLangScreen({navigation}) {
                         onPress={() => handleChangeLang(item.value)}
                     >
                         <View style={{flexDirection:'row', alignItems:'center',  gap: 5,}}>
-                            <SvgUri source={require('../assets/icons/Globe.svg')} width={24} height={24}/>
+                            <GlobeSvg width={24} height={24}/>
                             <Text
                                 style={{fontSize: 15, fontWeight:500}}>
                                 {item.label}

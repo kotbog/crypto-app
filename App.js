@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import StackNavigator from "./src/navigation/StackNavigator";
-import {Provider} from "react-redux";
+import {Provider, useSelector} from "react-redux";
 import {persistorRedux, store} from "./src/store/store";
 import {QueryClient} from "@tanstack/react-query";
 import {createAsyncStoragePersister} from "@tanstack/query-async-storage-persister";
@@ -10,6 +10,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
 import {PersistGate} from "redux-persist/integration/react";
 import './src/locales/i18n'
+import {useEffect} from "react";
+import i18next from "i18next";
 
 const queryClient = new QueryClient({
     defaultOptions: {

@@ -12,57 +12,55 @@ import TabNavigator from "./TabNavigator";
 import PostProfileScreen from "../screens/PostProfile";
 import EnterPinScreen from "../screens/EnterPin";
 import ChangeLangScreen from "../screens/ChangeLang";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import i18next from "i18next";
+import {useEffect} from "react";
+import {authUser} from "../store/slices/AuthSlice";
+import useAuth from "../hooks/useAuth";
 
 const Stack = createNativeStackNavigator();
 
 
 
 export default function StackNavigator() {
-    const tabs = [
-        {
-            name: 'Welcome',
-            component: WelcomeScreen
-        },
-        {
-            name: 'Login',
-            component: LoginScreen
-        },
-        {
-            name: 'HomeStack',
-            component: TabNavigator
-        },
-        {
-            name: 'Signup',
-            component: SignupScreen
-        },
-        {
-            name: 'Post',
-            component: PostProfileScreen
-        },
-        {
-            name: 'EnterPin',
-            component: EnterPinScreen
-        },
-        {
-            name: 'ChangeLangScreen',
-            component: ChangeLangScreen
-        }
-    ]
+    const currentLang = useSelector(state => state.profile.lang);
+
+    useEffect(() => {
+        i18next.changeLanguage(currentLang);
+    }, [currentLang]);
+    const {isAuthenticated} = useAuth();
 
     return (
         <Stack.Navigator
-            initialRouteName={'Welcome'}
+            initialRouteName={!isAuthenticated ? "Welcome" : "EnterPin"}
             screenOptions={{headerShown: false}}
         >
+
             {
-                tabs.map(tab =><Stack.Screen
-                        name={tab.name}
-                        component={tab.component}
-                        key={tab.name}
-                    />
-                )
+                isAuthenticated ?
+                    <Stack.Group>
+                        <Stack.Screen name={'ChangeLangScreen'} component={ChangeLangScreen} />
+                        <Stack.Screen name={'EnterPin'} component={EnterPinScreen} />
+                        <Stack.Screen name={'Post'} component={PostProfileScreen} />
+                        <Stack.Screen name={'HomeStack'} component={TabNavigator} />
+                    </Stack.Group>
+                    :
+                    <Stack.Group>
+                        <Stack.Screen name={'Welcome'} component={WelcomeScreen} />
+                        <Stack.Screen name={'Signup'} component={SignupScreen} />
+                        <Stack.Screen name={'Login'} component={LoginScreen} />
+                    </Stack.Group>
             }
+
+
+            {/*{*/}
+            {/*    tabs.map(tab =><Stack.Screen*/}
+            {/*            name={tab.name}*/}
+            {/*            component={tab.component}*/}
+            {/*            key={tab.name}*/}
+            {/*        />*/}
+            {/*    )*/}
+            {/*}*/}
         </Stack.Navigator>
     );
 }

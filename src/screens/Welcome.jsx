@@ -18,16 +18,17 @@ import Pending1 from '../assets/options/pending-1.png'
 import Pending2 from '../assets/options/pending-2.png'
 import BitcoinSvg from '../assets/Vector.svg'
 import {WelcomeOption} from "../components/WelcomeOption";
-import SvgUri from "react-native-svg-uri";
 import Link from "../components/Link";
 import {useTranslation} from "react-i18next";
+import useAuth from "../hooks/useAuth";
+
 
 
 
 
 export default function WelcomeScreen({navigation}) {
     const {t} = useTranslation()
-
+    const auth = useAuth()
     const options = [
         {
             text: t('CROWD_LENDING'),
@@ -55,7 +56,7 @@ export default function WelcomeScreen({navigation}) {
                 <View style={styles.options}>
                     <View style={styles.column1}>
                         <View style={styles.mainLogo}>
-                            <SvgUri width="50" source={BitcoinSvg} />
+                            <BitcoinSvg width={60} height={60} />
                         </View>
                         {
                             [options[1], options[3]].map((opt, index) =>
@@ -113,7 +114,8 @@ const styles = StyleSheet.create({
     },
     column1: {
         flex: 1,
-        gap:10
+        gap:10,
+        marginTop: 10
     },
     column2: {
         flex: 1,

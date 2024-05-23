@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
     ScrollView
 } from "react-native";
-import SvgUri from "react-native-svg-uri";
 import AddProfileSvg from '../assets/icons/add-profile.svg'
 import Pattern from '../assets/pattern2.png'
 import {Colors} from "../styles/colors";
@@ -53,10 +52,10 @@ export default function SignupScreen({navigation}) {
         <ImageBackground source={Pattern} style={{flex: 1, justifyContent: 'flex-end', backgroundColor: Colors.background}}>
             <View style={styles.main}>
                 <View style={styles.header}>
-                    <SvgUri source={AddProfileSvg}  width={24} height={24} style={styles.avatar}/>
+                    <AddProfileSvg  width={24} height={24} style={styles.avatar}/>
                     <View>
-                        <Text style={{fontSize: 15, color: Colors.textBlack}}>Sign up</Text>
-                        <Text style={{fontSize: 15, color: Colors.textGray}}>Personal Account </Text>
+                        <Text style={{fontSize: 15, color: Colors.textBlack}}>{t('SIGN_UP')}</Text>
+                        <Text style={{fontSize: 15, color: Colors.textGray}}>{t('PERSONAL_ACCOUNT')}</Text>
                     </View>
                 </View>
                 <ScrollView>
@@ -123,7 +122,7 @@ export default function SignupScreen({navigation}) {
                                 control={control}
                             />
                             <TouchableOpacity style={styles.showIcon} onPress={() => setShowPassword(!showPassword)}>
-                                <SvgUri width={20} height={20} source={ShowPasswordSvg} />
+                                <ShowPasswordSvg width={20} height={20} />
                             </TouchableOpacity>
                         </View>
                     </View>

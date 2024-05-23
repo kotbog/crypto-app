@@ -1,7 +1,7 @@
-import {Text, View} from "react-native";
+import {SafeAreaView, Text, View} from "react-native";
 
 export default function PortfolioScreen() {
-    return <View>
+    return <SafeAreaView>
         <Text>Portfolio</Text>
-    </View>
+    </SafeAreaView>
 }

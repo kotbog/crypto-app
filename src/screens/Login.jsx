@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import ProfileSvg from '../assets/icons/Profile.svg'
 import {Colors} from "../styles/colors";
-import SvgUri from "react-native-svg-uri";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Link from "../components/Link";
@@ -43,14 +42,12 @@ export default function LoginScreen({navigation}) {
 
     const [showPassword, setShowPassword] = useState(false);
     const {error, loading, user} = useSelector((state) => state.auth);
-
+    console.log(error)
     function onLoginSubmit() {
         const username = getValues('username');
         const password = getValues('password');
         dispatch(loginUser({username, password}));
     }
-
-    if(!error && user) navigation.navigate('HomeStack')
 
     return <View
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -62,7 +59,7 @@ export default function LoginScreen({navigation}) {
         <View style={styles.container}>
             <View style={styles.header}>
             <View style={styles.avatar}>
-                <SvgUri width={24} height={24} source={ProfileSvg} />
+                <ProfileSvg width={24} height={24}  />
             </View>
 
             <View>
@@ -116,7 +113,7 @@ export default function LoginScreen({navigation}) {
 
                             />
                             <TouchableOpacity style={styles.showIcon} onPress={() => setShowPassword(!showPassword)}>
-                                <SvgUri width={20} height={20} source={ShowPasswordSvg} />
+                                <ShowPasswordSvg width={20} height={20}  />
                             </TouchableOpacity>
                         </View>
 

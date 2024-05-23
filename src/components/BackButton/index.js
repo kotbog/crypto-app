@@ -1,10 +1,9 @@
 import {TouchableOpacity, StyleSheet} from "react-native";
 import BackSvg from "../../assets/icons/arrow-dropdown.svg";
-import SvgUri from "react-native-svg-uri";
 
 export default function BackButton({navigation}) {
     return <TouchableOpacity onPress={() => navigation.goBack()} style={styles.main}>
-        <SvgUri width={24} height={24} source={BackSvg} />
+        <BackSvg width={24} height={24}  />
     </TouchableOpacity>
 }
 

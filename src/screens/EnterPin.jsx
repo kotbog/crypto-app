@@ -2,17 +2,59 @@ import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-nati
 import Button from "../components/Button";
 import {Colors} from "../styles/colors";
 import BackButton from "../components/BackButton";
-import {useState} from "react";
-import SvgUri from "react-native-svg-uri";
+import {useEffect, useState} from "react";
+import DeviceSVG from "../assets/icons/device.svg"
+import DeleteSVG from "../assets/icons/delete.svg"
 import {useTranslation} from "react-i18next";
+import {getValueFor, saveSecureValue} from "../libs/SecureStore";
+import {useSelector} from "react-redux";
+import * as LocalAuthentication from 'expo-local-authentication';
+import useAuth from "../hooks/useAuth";
 
 export default function EnterPinScreen({navigation}) {
     const {t} = useTranslation()
     const [pinCode, setPinCode] = useState('');
+    const [pinCodeRepeat, setPinCodeRepeat] = useState('');
+    const [isRepeatPin, seIsRepeatPin] = useState(false);
+    const [retrievedPinCode, setRetrievedPinCode] = useState(null);
+    const user = useSelector(state => state.auth.user)
+    useEffect(() => {
+        const handleGetPinCode = async () => {
+            const pin = await getValueFor('pin')
+            setRetrievedPinCode(pin);
+        };
+        handleGetPinCode()
+    }, []);
+
+
+    useEffect(() => {
+        const loginWithBiometric = async () => {
+            try {
+                const { success } = await LocalAuthentication.authenticateAsync({
+                    promptMessage: 'Authenticate to login',
+                });
+
+                if (success) {
+                    navigation.navigate("HomeStack")
+                } else {
+                    console.log('Biometric authentication failed.');
+                }
+            } catch (error) {
+                console.error('Error during biometric authentication:', error);
+            }
+        };
+        loginWithBiometric()
+    }, [])
+
     function handleBtnPress(num) {
-        if(pinCode.length < 5) {
-            setPinCode(pinCode+num)
+        if(isRepeatPin) {
+            if(pinCodeRepeat.length < 5) {
+                setPinCodeRepeat(pinCodeRepeat + num)
+            }
+        }            else if(pinCode.length < 5){
+            setPinCode(pinCode + num)
         }
+
     }
     function handleDelete() {
         if(pinCode.length > 0) {
@@ -21,21 +63,41 @@ export default function EnterPinScreen({navigation}) {
         }
     }
 
+    async function handleSubmit() {
+        if(retrievedPinCode && retrievedPinCode === pinCode) {
+            navigation.navigate('HomeStack');
+        } else if(!retrievedPinCode && isRepeatPin) {
+            if(pinCodeRepeat === pinCode) {
+                await saveSecureValue('pin',pinCode);
+                navigation.navigate('HomeStack');
+            }
+        } else if(!retrievedPinCode && !isRepeatPin) {
+            seIsRepeatPin(true);
+        }
+    }
 
     return <SafeAreaView style={{flex: 1}}>
         <BackButton navigation={navigation}/>
         <View style={styles.header}>
             <View style={styles.iconDevice}>
-                <SvgUri source={require('../assets/icons/device.svg')} width={24} height={24}/>
+                <DeviceSVG width={24} height={24}/>
             </View>
-            <Text style={{fontSize: 15, color: Colors.textBlack, marginTop: 15}}>{t('CREATE_PIN')}</Text>
+            <Text style={{fontSize: 15, color: Colors.textBlack, marginTop: 15}}>
+                {
+                   retrievedPinCode
+                       ? t('ENTER_YOUR_PIN')
+                       :  isRepeatPin
+                           ? t('REPEAT_PIN')
+                           : t('CREATE_PIN')
+                }
+            </Text>
             <Text style={styles.lightText}>{t('ENTER_PIN')}</Text>
             <View style={{flexDirection: 'row', gap: 10, marginTop: 15}}>
                 {
                     Array.from({ length: 5 }).map((item, index) =>
                         <View style={{
                             ...styles.pinDot,
-                            backgroundColor:  index < pinCode.length
+                            backgroundColor:  index < (isRepeatPin ? pinCodeRepeat.length : pinCode.length)
                                 ? Colors.primaryOrange
                                 : '#C1C4CB'
                         }} key={index}></View>
@@ -59,11 +121,11 @@ export default function EnterPinScreen({navigation}) {
                     <Text style={{fontSize: 28, color: Colors.textBlack, fontWeight: 700}}>0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.numBtn} onPress={handleDelete}>
-                    <SvgUri source={require('../assets/icons/delete.svg')} width={30} height={30}/>
+                    <DeleteSVG width={30} height={30}/>
                 </TouchableOpacity>
         </View>
         <View style={styles.btnGroup}>
-            <Button value={t('CONTINUE')} onPress={() => navigation.navigate('HomeStack')}/>
+            <Button value={t('CONTINUE')} onPress={handleSubmit}/>
         </View>
     </SafeAreaView>
 }

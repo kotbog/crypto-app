@@ -3,27 +3,24 @@ import {Colors} from "../styles/colors";
 import RightArrowSvg from '../assets/icons/arrow-dropdown-right.svg'
 import LinkSvg from '../assets/icons/link.svg'
 import ArrowSvg from '../assets/icons/ArrowLeft.svg'
-
-import SvgUri from "react-native-svg-uri";
 import Post from "../components/Post";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {fetchPosts} from "../store/slices/PostsSlice";
 import {useQuery} from "@tanstack/react-query";
 import {getPosts} from "../services/PostsService";
 import {useTranslation} from "react-i18next";
+import useAuth from "../hooks/useAuth";
 
 export default function HomeScreen({navigation}) {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['posts'],
         queryFn: () => getPosts(3)
     });
-
     const {t} = useTranslation()
 
     const user = useSelector((state) => state.auth.user)
+    console.log(user)
     const posts = data;
-    if(isLoading) return <Text>Loading</Text>
+    if(isLoading ) return <SafeAreaView><Text>{`${t('LOADING')}...`}</Text></SafeAreaView>
     return <ScrollView style={{flex:1}}>
         <View style={styles.header}>
             <Text style={{fontSize: 13, color: Colors.white}}>{t("YOUR_NAME")}</Text>
@@ -36,7 +33,7 @@ export default function HomeScreen({navigation}) {
                     <Text style={{color: Colors.textGray, fontSize: 12}}>Lorem ipsum</Text>
                     <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 20}}>
                         <Text style={{color: Colors.primaryOrange, fontSize: 15}}>Go to Call</Text>
-                        <SvgUri source={RightArrowSvg} width={18} height={18}/>
+                        <RightArrowSvg width={18} height={18}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.block}>
@@ -48,23 +45,27 @@ export default function HomeScreen({navigation}) {
             <ScrollView style={styles.additions} horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.additionItem}>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                        <SvgUri source={LinkSvg} width={24} height={24} style={styles.linkIcon}/>
+                        <View style={styles.linkIcon}>
+                            <LinkSvg width={24} height={24} />
+                        </View>
                         <Text style={{color: Colors.white, fontSize: 15, maxWidth: '70%'}}>Link your Bank Account</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <Text style={{color: Colors.white, fontSize: 15}}>{`2 ${t("STEPS")}`}</Text>
-                        <SvgUri source={ArrowSvg} width={30} height={30}/>
+                        <ArrowSvg width={30} height={30}/>
                     </View>
                 </View>
 
                 <View style={styles.additionItem}>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                        <SvgUri source={LinkSvg} width={24} height={24} style={styles.linkIcon}/>
+                        <View style={styles.linkIcon}>
+                            <LinkSvg width={24} height={24} />
+                        </View>
                         <Text style={{color: Colors.white, fontSize: 15, maxWidth: '70%'}}>Link your Bank Account</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <Text style={{color: Colors.white, fontSize: 15}}>{`2 ${t("STEPS")}`}</Text>
-                        <SvgUri source={ArrowSvg} width={30} height={30}/>
+                        <ArrowSvg width={30} height={30}/>
                     </View>
                 </View>
             </ScrollView>

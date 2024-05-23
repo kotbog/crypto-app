@@ -1,17 +1,23 @@
 import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import BackButton from "../components/BackButton";
 import {Colors} from "../styles/colors";
-import SvgUri from "react-native-svg-uri";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../store/slices/AuthSlice";
 import {useTranslation} from "react-i18next";
+import GlobeSvg from '../assets/icons/Globe.svg'
+import LogOutSvg from '../assets/icons/exit.svg'
+import ArrowRightSvg from '../assets/icons/arrow-dropdown-right.svg'
+import useAuth from "../hooks/useAuth";
+import * as SecureStore from "expo-secure-store";
 
 export default function ProfileScreen({navigation}) {
     const dispatch = useDispatch();
+    const auth = useAuth()
     const {t} = useTranslation();
     const user = useSelector((state) => state.auth.user)
-    function handleLogOut() {
+    async function handleLogOut() {
         dispatch(logout());
+        await SecureStore.deleteItemAsync('pin')
     }
     function handleChangeLang() {
         navigation.navigate('ChangeLangScreen');
@@ -28,18 +34,18 @@ export default function ProfileScreen({navigation}) {
             <Text style={styles.smHeading}>{t("BASIC")}</Text>
             <TouchableOpacity style={styles.settingsItem} onPress={handleChangeLang}>
                 <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                    <SvgUri source={require('../assets/icons/Globe.svg')} width={24} height={24}/>
+                    <GlobeSvg width={24} height={24}/>
                     <Text>{t("LANGUAGE")}</Text>
                 </View>
-                <SvgUri source={require('../assets/icons/arrow-dropdown-right.svg')} width={24} height={24}/>
+                <ArrowRightSvg width={24} height={24}/>
             </TouchableOpacity>
             <Text style={styles.smHeading}>{t("OTHER")}</Text>
             <TouchableOpacity style={styles.settingsItem} onPress={handleLogOut}>
                 <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                    <SvgUri source={require('../assets/icons/exit.svg')} width={24} height={24}/>
+                    <LogOutSvg width={24} height={24}/>
                     <Text>{t("LOG_OUT")}</Text>
                 </View>
-                <SvgUri source={require('../assets/icons/arrow-dropdown-right.svg')} width={24} height={24}/>
+                <ArrowRightSvg width={24} height={24}/>
             </TouchableOpacity>
         </View>
 

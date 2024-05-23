@@ -1,19 +1,20 @@
 import {SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
 import Input from "../components/Input";
 import {Colors} from "../styles/colors";
-import SvgUri from "react-native-svg-uri";
 import PostItem from "../components/PostItem";
-import {useSelector} from "react-redux";
 import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {getPosts} from "../services/PostsService";
 import {useTranslation} from "react-i18next";
+import SearchSVG from '../assets/icons/search.svg'
+import useAuth from "../hooks/useAuth";
 
 export default function SearchScreen({navigation}) {
     const { data:posts, isLoading, isError } = useQuery({
         queryKey: ['allPosts'],
         queryFn: () => getPosts(10)
     });
+    const auth = useAuth()
     const {t} = useTranslation();
     const [searchInput, setSearchInput] = useState('');
     function handleInputChange(text) {
@@ -25,7 +26,7 @@ export default function SearchScreen({navigation}) {
             {t('SEARCH')}
         </Text>
         <View style={{paddingHorizontal: 10}}>
-            <SvgUri source={require('../assets/icons/search.svg')} width={30} height={30} style={styles.searchIcon}/>
+            <SearchSVG width={30} height={30} style={styles.searchIcon}/>
             <Input
                 style={styles.input}
                 placeholder={`${t('SEARCH_POSTS')}...`}

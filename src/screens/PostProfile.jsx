@@ -2,18 +2,21 @@ import {SafeAreaView, Image, Text, StyleSheet, ScrollView, View} from "react-nat
 import {Colors} from "../styles/colors";
 import Comment from "../components/Comment";
 import Button from "../components/Button";
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {fetchPostDetails} from "../store/slices/PostDetailsSlice";
+import {useQuery} from "@tanstack/react-query";
+import {getPostDetails, getPosts} from "../services/PostsService";
+import {useTranslation} from "react-i18next";
+import useAuth from "../hooks/useAuth";
 
 export default function PostProfileScreen({navigation, route}) {
     const {postId} = route.params;
-    const dispatch = useDispatch();
-    const postData = useSelector((state) => state.postData.data);
-    console.log(postData)
-    useEffect(() => {
-        dispatch(fetchPostDetails(postId))
-    }, [dispatch]);
+    const auth = useAuth()
+    const {t} = useTranslation()
+    const { data, isLoading, isError } = useQuery({
+        queryKey: [`postDetails-${postId}`],
+        queryFn: () => getPostDetails({postId})
+    });
+    const postData = data;
+    if(isLoading) return <SafeAreaView style={{flex:1, justifyContent:'center', alignItems: 'center'}}><Text>{`${t('COMMENTS')}...`}</Text></SafeAreaView>
     return <SafeAreaView style={styles.container}>
         <ScrollView style={{flex: 1}}>
             <View style={styles.header}>
@@ -21,7 +24,7 @@ export default function PostProfileScreen({navigation, route}) {
                 <Image source={require('../assets/post-img.png')}/>
             </View>
             <View style={{paddingHorizontal: 10}}>
-            <Text style={styles.smHeading}>About</Text>
+            <Text style={styles.smHeading}>{t('ABOUT')}</Text>
             <View style={styles.about}>
                 <Text
                     style={{fontSize: 15, color: Colors.textBlack,lineHeight: 32,}}
@@ -29,20 +32,22 @@ export default function PostProfileScreen({navigation, route}) {
                 </View>
         </View>
         <View style={{gap: 10, marginTop: 10, paddingHorizontal: 10, paddingBottom: 20}}>
-            <Text style={styles.smHeading}>Comments</Text>
+            <Text style={styles.smHeading}>{t('COMMENTS')}</Text>
             {
                 postData.comments.map(comment => {
                     return <Comment
                         username={comment.name}
                         email={comment.email}
-                        content={comment.body}/>
+                        content={comment.body}
+                        key={comment.id}
+                    />
 
                 })
             }
             </View>
         </ScrollView>
         <View style={{paddingHorizontal: 10, paddingVertical: 10,backgroundColor: Colors.white}}>
-            <Button value={'Back'} onPress={() => navigation.goBack()}/>
+            <Button value={t('BACK')} onPress={() => navigation.goBack()}/>
         </View>
     </SafeAreaView>
 }
