@@ -19,7 +19,6 @@ export const loginUser = createAsyncThunk(
                     response: error.response?.data
                 });
             }
-            console.log(error.message)
             return rejectWithValue({ message: error.message });
         }
     }

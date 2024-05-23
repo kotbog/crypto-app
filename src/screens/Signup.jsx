@@ -103,7 +103,7 @@ export default function SignupScreen({navigation}) {
                     <View>
                         <Text style={{marginLeft:10,paddingBottom:5, color: Colors.textGray, fontSize: 15}}>{t('PASSWORD')}</Text>
 
-                            {errors.email &&
+                            {errors.password &&
                                 <Text style={styles.errorText}>{errors.password.message}</Text>
                             }
                         <View style={{position: 'relative'}}>
@@ -131,7 +131,7 @@ export default function SignupScreen({navigation}) {
                 <View
                     behavior={'height'}
                     style={{padding: 10}}>
-                    <Button value={t('CONTINUE')} onPress={onSubmit}/>
+                    <Button value={t('CONTINUE')} onPress={handleSubmit(onSubmit)}/>
                 </View>
             </View>
         </ImageBackground>

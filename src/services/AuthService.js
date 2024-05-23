@@ -7,7 +7,7 @@ import {setToken} from "../store/slices/AuthSlice";
 
 
 export async function loginUserRequest ({username, password}) {
-    const response = await axios.post('https://dummyjson.com/auth/login', { username, password, expiresInMins: 2 });
+    const response = await axios.post('https://dummyjson.com/auth/login', { username, password, expiresInMins: 30 });
     return response.data
 }
 

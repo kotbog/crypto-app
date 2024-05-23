@@ -77,7 +77,6 @@ export default function EnterPinScreen({navigation}) {
     }
 
     return <SafeAreaView style={{flex: 1}}>
-        <BackButton navigation={navigation}/>
         <View style={styles.header}>
             <View style={styles.iconDevice}>
                 <DeviceSVG width={24} height={24}/>
