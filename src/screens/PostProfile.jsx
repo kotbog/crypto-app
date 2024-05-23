@@ -16,7 +16,7 @@ export default function PostProfileScreen({navigation, route}) {
         queryFn: () => getPostDetails({postId})
     });
     const postData = data;
-    if(isLoading) return <SafeAreaView style={{flex:1, justifyContent:'center', alignItems: 'center'}}><Text>{`${t('COMMENTS')}...`}</Text></SafeAreaView>
+    if(isLoading) return <SafeAreaView style={{flex:1, justifyContent:'center', alignItems: 'center'}}><Text>{`${t('LOADING')}...`}</Text></SafeAreaView>
     return <SafeAreaView style={styles.container}>
         <ScrollView style={{flex: 1}}>
             <View style={styles.header}>

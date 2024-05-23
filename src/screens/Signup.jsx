@@ -52,7 +52,9 @@ export default function SignupScreen({navigation}) {
         <ImageBackground source={Pattern} style={{flex: 1, justifyContent: 'flex-end', backgroundColor: Colors.background}}>
             <View style={styles.main}>
                 <View style={styles.header}>
-                    <AddProfileSvg  width={24} height={24} style={styles.avatar}/>
+                    <View style={styles.avatar}>
+                        <AddProfileSvg  width={24} height={24}/>
+                    </View>
                     <View>
                         <Text style={{fontSize: 15, color: Colors.textBlack}}>{t('SIGN_UP')}</Text>
                         <Text style={{fontSize: 15, color: Colors.textGray}}>{t('PERSONAL_ACCOUNT')}</Text>

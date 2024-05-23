@@ -1,6 +1,4 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import postsReducer from './slices/PostsSlice'
-import postDetails from './slices/PostDetailsSlice'
 import authReducer from './slices/AuthSlice'
 import profileReducer from './slices/ProfileSlice'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,8 +13,6 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-    posts: postsReducer,
-    postData: postDetails,
     auth: authReducer,
     profile: profileReducer
 });

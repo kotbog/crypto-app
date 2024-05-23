@@ -57,9 +57,13 @@ export default function EnterPinScreen({navigation}) {
 
     }
     function handleDelete() {
-        if(pinCode.length > 0) {
-            const delPin = pinCode.slice(0, pinCode.length - 1); //remove last number
+        let delPin;  //remove last number
+        if(!isRepeatPin) {
+            delPin = pinCode.slice(0, pinCode.length - 1);
             setPinCode(delPin);
+        } else {
+            delPin = pinCodeRepeat.slice(0, pinCodeRepeat.length - 1);
+            setPinCodeRepeat(delPin);
         }
     }
 
